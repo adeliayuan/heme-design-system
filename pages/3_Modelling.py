@@ -32,11 +32,95 @@ else:
     X = df.iloc[:, 1:-1].values
     y = df.iloc[:, -1].values
 
-    if st.button("Jalankan Model"):
+    # INPUT HYPERPARAMETER
 
+    st.subheader("Input Hyperparameter")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        n_estimators = st.text_input(
+            "n_estimators",
+            placeholder="Masukkan jumlah pohon"
+        )
+
+        max_depth = st.text_input(
+            "max_depth",
+            placeholder="Masukkan kedalaman maksimum"
+        )
+
+        min_samples_split = st.text_input(
+            "min_samples_split",
+            placeholder="Masukkan minimum sampel untuk split"
+        )
+
+    with col2:
+
+        min_samples_leaf = st.text_input(
+            "min_samples_leaf",
+            placeholder="Masukkan minimum sampel pada leaf"
+        )
+
+        max_features = st.text_input(
+            "max_features",
+            placeholder="Rentang nilai 0,1-1,0 "
+        )
+
+    st.divider()
+
+    if st.button("Jalankan Model", use_container_width=True):
+        # Gunakan default sklearn jika kosong
+        try:
+
+            n_estimators = (
+                int(n_estimators)
+                if n_estimators.strip() != ""
+                else 100
+            )
+
+            max_depth = (
+                int(max_depth)
+                if max_depth.strip() != ""
+                else None
+            )
+
+            min_samples_split = (
+                int(min_samples_split)
+                if min_samples_split.strip() != ""
+                else 2
+            )
+
+            min_samples_leaf = (
+                int(min_samples_leaf)
+                if min_samples_leaf.strip() != ""
+                else 1
+            )
+
+            if max_features.strip() == "":
+                max_features = "sqrt"
+
+            else:
+                try:
+                    max_features = float(max_features)
+                except:
+                    max_features = max_features
+
+        except ValueError:
+
+            st.error(
+                "Input hyperparameter tidak valid."
+            )
+            st.stop()
         with st.spinner("Melakukan proses training dan evaluasi model..."):
 
-            model = build_model()
+            model = build_model(
+                n_estimators=n_estimators,
+                max_depth=max_depth,
+                min_samples_split=min_samples_split,
+                min_samples_leaf=min_samples_leaf,
+                max_features=max_features
+            )
 
             # CROSS VALIDATION
             skf = StratifiedKFold(
