@@ -16,7 +16,6 @@ else:
     df = df.copy()
 
     st.subheader("Data Awal")
-    st.dataframe(df.head())
 
     st.write(f"Jumlah data awal: **{df.shape[0]} baris**")
     st.write(f"Jumlah fitur: **{df.shape[1]} kolom**")
