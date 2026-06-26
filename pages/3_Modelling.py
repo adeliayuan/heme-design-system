@@ -2,19 +2,16 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
     recall_score,
     f1_score,
     roc_curve,
-    auc
-)
+    auc)
 from sklearn.preprocessing import label_binarize
 from imblearn.over_sampling import SMOTE
-
 from model_apso import build_model
 from utils import load_css
 
@@ -122,48 +119,49 @@ else:
                 max_features=max_features
             )
 
-            # CROSS VALIDATION
-            skf = StratifiedKFold(
-                n_splits=10,
-                shuffle=True,
+            # Pembagian data
+            X_train, X_test, y_train, y_test = train_test_split(
+                X,
+                y,
+                test_size=0.10,
+                stratify=y,
                 random_state=42
             )
+
             accs, pres, recs, f1s = [], [], [], []
 
-            for train_idx, test_idx in skf.split(X, y):
-                X_train, X_test = X[train_idx], X[test_idx]
-                y_train, y_test = y[train_idx], y[test_idx]
+            # TRAINING
+            model.fit(X_train, y_train)
+            y_pred = model.predict(X_test)
 
-                # TRAINING
-                model.fit(X_train, y_train)
-                y_pred = model.predict(X_test)
+            # METRIK EVALUASI
+            accs.append(
+                accuracy_score(y_test, y_pred)
+            )
 
-                # METRIK EVALUASI
-                accs.append(
-                    accuracy_score(y_test, y_pred)
+            pres.append(
+                precision_score(
+                    y_test,
+                    y_pred,
+                    average='macro'
                 )
-                pres.append(
-                    precision_score(
-                        y_test,
-                        y_pred,
-                        average='macro'
-                    )
-                )
-                recs.append(
-                    recall_score(
-                        y_test,
-                        y_pred,
-                        average='macro'
-                    )
-                )
+            )
 
-                f1s.append(
-                    f1_score(
-                        y_test,
-                        y_pred,
-                        average='macro'
-                    )
+            recs.append(
+                recall_score(
+                    y_test,
+                    y_pred,
+                    average='macro'
                 )
+            )
+
+            f1s.append(
+                f1_score(
+                    y_test,
+                    y_pred,
+                    average='macro'
+                )
+            )
 
         st.success("Modeling berhasil dilakukan")
 
