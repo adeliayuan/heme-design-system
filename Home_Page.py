@@ -1,44 +1,71 @@
 import streamlit as st
 
-st.set_page_config(page_title="Sistem Deteksi Anemia", layout="wide")
+st.set_page_config(
+    page_title="Sistem Klasifikasi Subtipe Anemia",
+    layout="wide"
+)
 
-# load css
+# Load CSS
 with open("style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-st.title("🩸 Sistem Klasifikasi Subtipe Anemia")
+# Judul
+st.markdown(
+    """
+    <h2 style='text-align:center; margin-bottom:20px;'>
+    Sistem Klasifikasi Subtipe Anemia
+    </h2>
+    """,
+    unsafe_allow_html=True
+)
 
-st.markdown("""
-### Klasifikasi Subtipe Anemia Berbasis Machine Learning
+# Deskripsi
+st.markdown(
+    """
+    <div class="description-box">
+        Sistem ini dikembangkan untuk membantu proses identifikasi dini dan
+        klasifikasi subtipe anemia berdasarkan hasil pemeriksaan
+        Hematologi Lengkap (Complete Blood Count/CBC).<br>
+        Model klasifikasi menggunakan metode Extremely Randomized Trees (Extra Trees).
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-Sistem ini dikembangkan untuk membantu proses **deteksi dini dan klasifikasi subtipe anemia**
-berdasarkan parameter hasil pemeriksaan **Hematologi Lengkap (Complete Blood Count/CBC)**.
+st.markdown("<br>", unsafe_allow_html=True)
 
-Model klasifikasi menggunakan metode **Extremely Randomized Trees (Extra Trees)**
-dengan optimasi hyperparameter untuk meningkatkan performa.
+# Dua kolom
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown("""
+    <div class="card">
+        <div class="card-title">Klasifikasi yang Didukung</div>
+        <p class="card-text">☑ Anemia Defisiensi Besi (ADB)</p>
+        <p class="card-text">☑ Anemia Penyakit Kronis</p>
+        <p class="card-text">☑ Non Anemia</p>
+    </div>
+    """, unsafe_allow_html=True)
 
----
+with col2:
+    st.markdown("""
+    <div class="card">
+        <div class="card-title">Data Hematologi yang Digunakan</div>
+        <p class="card-text">• Hemoglobin (Hb)</p>
+        <p class="card-text">• Hematokrit (HCT)</p>
+        <p class="card-text">• Jumlah Eritrosit (RBC)</p>
+        <p class="card-text">• Mean Corpuscular Volume (MCV)</p>
+        <p class="card-text">• Mean Corpuscular Hemoglobin (MCH)</p>
+        <p class="card-text">• Mean Corpuscular Hemoglobin Concentration (MCHC)</p>
+        <p class="card-text">• Red Cell Distribution Width CV (RDW-CV)</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-### Klasifikasi yang Didukung
-Sistem mampu mengidentifikasi beberapa kondisi berikut:
-
-✅ **Anemia Defisiensi Besi (ADB)**  
-✅ **Anemia Penyakit Kronis**  
-✅ **Non Anemia**
-
----
-
-### 🧪 Data Hematologi yang Digunakan
-Beberapa data hasil tes laboratorium yang digunakan dalam proses klasifikasi antara lain:
-
-- Hemoglobin (Hb)
-- Hematokrit (HCT)
-- Jumlah Eritrosit (RBC)
-- Mean Corpuscular Volume (MCV)
-- Mean Corpuscular Hemoglobin (MCH)
-- Mean Corpuscular Hemoglobin Concentration (MCHC)
-- Red Cell Distribution Width - Coefficient of Variation (RDW - CV)
-
-""")
-
-st.info("💡 Gunakan menu pada sidebar untuk memulai proses klasifikasi.")
+# Info bawah
+st.markdown(
+    """
+    <div class="info-box">
+        💡 Gunakan menu pada sidebar untuk memulai proses klasifikasi.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
